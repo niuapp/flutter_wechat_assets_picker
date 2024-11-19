@@ -171,7 +171,7 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
 
   /// Space between assets item widget.
   /// 资源部件之间的间隔
-  double get itemSpacing => 2;
+  double get itemSpacing => 0;
 
   /// Item's height in app bar.
   /// 顶栏内各个组件的统一高度
@@ -1402,7 +1402,8 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
     }
 
     if (p.hasMoreToLoad) {
-      if ((p.pageSize <= gridCount * 3 && index == length - 1) || index == length - gridCount * 3) {
+      //预加载一页
+      if ((p.pageSize <= gridCount * 3 && index == length - 1) || index == (length - p.pageSize~/2)) {
         p.loadMoreAssets();
       }
     }
