@@ -1403,7 +1403,7 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
 
     if (p.hasMoreToLoad) {
       //预加载一页
-      if ((p.pageSize <= gridCount * 3 && index == length - 1) || index == (length - p.pageSize~/2)) {
+      if ((p.pageSize <= gridCount * 3 && index == length - 1) || index == (length - p.pageSize ~/ 2)) {
         p.loadMoreAssets();
       }
     }
@@ -2123,10 +2123,13 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
   Widget itemBannedIndicator(BuildContext context, AssetEntity asset) {
     return Consumer<DefaultAssetPickerProvider>(
       builder: (_, DefaultAssetPickerProvider p, __) {
-        final bool isDisabled = (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) || (isWeChatMoment && asset.type == AssetType.video && p.selectedAssets.isNotEmpty);
+        // 不选视频时长超过60秒的
+        final bool isDisabled = (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) || (isWeChatMoment && asset.type == AssetType.video && p.selectedAssets.isNotEmpty) || (asset.videoDuration.inMilliseconds > 60000);
         if (isDisabled) {
           return Container(
             color: theme.colorScheme.background.withOpacity(.85),
+            alignment: Alignment.center,
+            child: Text('不可用'),
           );
         }
         return const SizedBox.shrink();
