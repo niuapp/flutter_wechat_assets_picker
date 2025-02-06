@@ -911,7 +911,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
           }
           final asset = previewAssets.elementAt(assetIndex);
           // 不选视频时长超过60秒的
-          if (asset.videoDuration.inMilliseconds > 60000) {
+          if (asset.videoDuration.inMilliseconds > 60000 * 5) {
             return Container();
           }
           return Selector<AssetPickerViewerProvider<AssetEntity>, List<AssetEntity>>(
