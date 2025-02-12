@@ -949,8 +949,11 @@ class DefaultAssetPickerViewerBuilderDelegate
             );
           }
           final asset = previewAssets.elementAt(assetIndex);
-          return Selector<AssetPickerViewerProvider<AssetEntity>,
-              List<AssetEntity>>(
+          // 不选视频时长超过60秒的
+          if (asset.videoDuration.inMilliseconds > 60000 * 5) {
+            return Container();
+          }
+          return Selector<AssetPickerViewerProvider<AssetEntity>, List<AssetEntity>>(
             selector: (_, p) => p.currentlySelectedAssets,
             builder: (context, assets, _) {
               final bool isSelected = assets.contains(asset);

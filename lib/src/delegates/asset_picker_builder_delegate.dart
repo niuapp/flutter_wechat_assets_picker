@@ -1437,8 +1437,8 @@ class DefaultAssetPickerBuilderDelegate
     }
 
     if (p.hasMoreToLoad) {
-      if ((p.pageSize <= gridCount * 3 && index == length - 1) ||
-          index == length - gridCount * 3) {
+      //预加载一页
+      if ((p.pageSize <= gridCount * 3 && index == length - 1) || index == (length - p.pageSize ~/ 2)) {
         p.loadMoreAssets();
       }
     }
@@ -1705,67 +1705,97 @@ class DefaultAssetPickerBuilderDelegate
 
   @override
   Widget imageAndVideoItemBuilder(
-    BuildContext context,
-    int index,
-    AssetEntity asset,
-  ) {
-    return LocallyAvailableBuilder(
-      asset: asset,
+      BuildContext context,
+      int index,
+      AssetEntity asset,
+      ) {
+    final imageProvider = AssetEntityImageProvider(
+      asset,
       isOriginal: false,
-      withSubtype: false,
-      thumbnailOption: ThumbnailOption(size: gridThumbnailSize),
-      builder: (context, asset) {
-        final imageProvider = AssetEntityImageProvider(
-          asset,
-          isOriginal: false,
-          thumbnailSize: gridThumbnailSize,
-        );
-        return Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            RepaintBoundary(
-              child: AssetEntityGridItemBuilder(
-                image: imageProvider,
-                failedItemBuilder: failedItemBuilder,
-              ),
+      thumbnailSize: gridThumbnailSize,
+    );
+
+    return Container(
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          RepaintBoundary(
+            child: AssetEntityGridItemBuilder(
+              image: imageProvider,
+              failedItemBuilder: failedItemBuilder,
             ),
-            FutureBuilder(
-              future: imageProvider.imageFileType,
-              builder: (context, snapshot) {
-                if (snapshot.data case final type?
-                    when type == ImageFileType.gif) {
-                  return gifIndicator(context, asset);
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-            if (asset.type == AssetType.video) // 如果为视频则显示标识
-              videoIndicator(context, asset),
-            if (asset.isLivePhoto) buildLivePhotoIndicator(context, asset),
-          ],
-        );
-      },
-      progressBuilder: (context, state, progress) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            state == PMRequestState.failed
-                ? Icons.cloud_off
-                : Icons.cloud_download_outlined,
-            color: context.iconTheme.color?.withOpacity(.4),
-            size: 24.0,
           ),
-          if (state != PMRequestState.success && state != PMRequestState.failed)
-            ScaleText(
-              ' ${((progress ?? 0) * 100).toInt()}%',
-              style: TextStyle(
-                color: context.textTheme.bodyMedium?.color?.withOpacity(.4),
-                fontSize: 12.0,
-              ),
-            ),
+          FutureBuilder(
+            future: imageProvider.imageFileType,
+            builder: (context, snapshot) {
+              if (snapshot.data case final type? when type == ImageFileType.gif) {
+                return gifIndicator(context, asset);
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+          if (asset.type == AssetType.video) // 如果为视频则显示标识
+            videoIndicator(context, asset),
+          if (asset.isLivePhoto) buildLivePhotoIndicator(context, asset),
         ],
       ),
     );
+
+    /// todo 不知道为什么会拿两次缩咯图
+    // return LocallyAvailableBuilder(
+    //   asset: asset,
+    //   isOriginal: false,
+    //   withSubtype: false,
+    //   thumbnailOption: ThumbnailOption(size: gridThumbnailSize),
+    //   builder: (context, asset) {
+    //     final imageProvider = AssetEntityImageProvider(
+    //       asset,
+    //       isOriginal: false,
+    //       thumbnailSize: gridThumbnailSize,
+    //     );
+    //     return Stack(
+    //       fit: StackFit.expand,
+    //       children: <Widget>[
+    //         RepaintBoundary(
+    //           child: AssetEntityGridItemBuilder(
+    //             image: imageProvider,
+    //             failedItemBuilder: failedItemBuilder,
+    //           ),
+    //         ),
+    //         FutureBuilder(
+    //           future: imageProvider.imageFileType,
+    //           builder: (context, snapshot) {
+    //             if (snapshot.data case final type? when type == ImageFileType.gif) {
+    //               return gifIndicator(context, asset);
+    //             }
+    //             return const SizedBox.shrink();
+    //           },
+    //         ),
+    //         if (asset.type == AssetType.video) // 如果为视频则显示标识
+    //           videoIndicator(context, asset),
+    //         if (asset.isLivePhoto) buildLivePhotoIndicator(context, asset),
+    //       ],
+    //     );
+    //   },
+    //   progressBuilder: (context, state, progress) => Row(
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: [
+    //       Icon(
+    //         state == PMRequestState.failed ? Icons.cloud_off : Icons.cloud_download_outlined,
+    //         color: context.iconTheme.color?.withOpacity(.4),
+    //         size: 24.0,
+    //       ),
+    //       if (state != PMRequestState.success && state != PMRequestState.failed)
+    //         ScaleText(
+    //           ' ${((progress ?? 0) * 100).toInt()}%',
+    //           style: TextStyle(
+    //             color: context.textTheme.bodyMedium?.color?.withOpacity(.4),
+    //             fontSize: 12.0,
+    //           ),
+    //         ),
+    //     ],
+    //   ),
+    // );
   }
 
   /// While the picker is switching path, this will displayed.
@@ -2157,14 +2187,13 @@ class DefaultAssetPickerBuilderDelegate
   Widget itemBannedIndicator(BuildContext context, AssetEntity asset) {
     return Consumer<DefaultAssetPickerProvider>(
       builder: (_, DefaultAssetPickerProvider p, __) {
-        final bool isDisabled =
-            (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) ||
-                (isWeChatMoment &&
-                    asset.type == AssetType.video &&
-                    p.selectedAssets.isNotEmpty);
+        // 不选视频时长超过60秒的
+        final bool isDisabled = (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) || (isWeChatMoment && asset.type == AssetType.video && p.selectedAssets.isNotEmpty) || (asset.videoDuration.inMilliseconds > 60000 * 5);
         if (isDisabled) {
           return Container(
             color: theme.colorScheme.background.withOpacity(.85),
+            alignment: Alignment.center,
+            child: Text('不可用'),
           );
         }
         return const SizedBox.shrink();
