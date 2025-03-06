@@ -53,8 +53,7 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
   @override
   void didUpdateWidget(ImagePageBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.asset != oldWidget.asset ||
-        widget.previewThumbnailSize != oldWidget.previewThumbnailSize) {
+    if (widget.asset != oldWidget.asset || widget.previewThumbnailSize != oldWidget.previewThumbnailSize) {
       _isLocallyAvailable = false;
       _livePhotoVideoController
         ?..pause()
@@ -93,12 +92,20 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
   }
 
   Widget _imageBuilder(BuildContext context, AssetEntity asset) {
+    ImageProvider? imageProvider;
+    if (asset.title?.startsWith('.&simple&-EDIT-') ?? false) {
+      String path = asset.title?.replaceFirst('.&simple&-EDIT-', '') ?? '';
+      if (path.isNotEmpty && File(path).existsSync()) {
+        imageProvider = ExtendedFileImageProvider(File(path));
+      }
+    }
     return ExtendedImage(
-      image: AssetEntityImageProvider(
-        asset,
-        isOriginal: _isOriginal,
-        thumbnailSize: widget.previewThumbnailSize,
-      ),
+      image: imageProvider ??
+          AssetEntityImageProvider(
+            asset,
+            isOriginal: _isOriginal,
+            thumbnailSize: widget.previewThumbnailSize,
+          ),
       fit: BoxFit.contain,
       mode: ExtendedImageMode.gesture,
       onDoubleTap: widget.delegate.updateAnimation,
@@ -265,21 +272,17 @@ class _LivePhotoWidgetState extends State<_LivePhotoWidget> {
             return ValueListenableBuilder(
               valueListenable: _showVideo,
               builder: (context, showVideo, child) {
-                if (imageGestureState == null ||
-                    widget.state.extendedImageInfo == null) {
+                if (imageGestureState == null || widget.state.extendedImageInfo == null) {
                   return child!;
                 }
-                final scaled = imageGestureState.gestureDetails?.totalScale !=
-                    imageGestureState.imageGestureConfig?.initialScale;
+                final scaled = imageGestureState.gestureDetails?.totalScale != imageGestureState.imageGestureConfig?.initialScale;
                 final size = MediaQuery.sizeOf(context);
-                final imageRect =
-                    GestureWidgetDelegateFromState.getRectFormState(
+                final imageRect = GestureWidgetDelegateFromState.getRectFormState(
                   Offset.zero & size,
                   imageGestureState,
                   copy: true,
                 );
-                final videoRect =
-                    GestureWidgetDelegateFromState.getRectFormState(
+                final videoRect = GestureWidgetDelegateFromState.getRectFormState(
                   Offset.zero & size,
                   imageGestureState,
                   width: _controller.value.size.width,
@@ -347,8 +350,7 @@ class _LivePhotoWidgetState extends State<_LivePhotoWidget> {
               color: Colors.white,
               fontSize: 14.0,
             ),
-            semanticsLabel:
-                widget.textDelegate.semanticsTextDelegate.livePhotoIndicator,
+            semanticsLabel: widget.textDelegate.semanticsTextDelegate.livePhotoIndicator,
             strutStyle: const StrutStyle(forceStrutHeight: true, height: 1),
           ),
         ],
