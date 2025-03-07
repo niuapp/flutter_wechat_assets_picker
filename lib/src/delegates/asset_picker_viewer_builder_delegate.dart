@@ -619,7 +619,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                           builder: (_, AsyncSnapshot<int> snapshot) {
                             final viewingIndex = shouldReversePreview ? previewAssets.length - snapshot.data! - 1 : snapshot.data!;
                             AssetEntity currentData = previewAssets[viewingIndex];
-                            return currentData.type == AssetType.image
+                            return (selectedAssets != null && currentData.type == AssetType.image && (selectedAssets?.any((element) => element.id == currentData.id) ?? false))
                                 ? GestureDetector(
                                     onTap: () async {
                                       File? file = await currentData.file;
@@ -674,7 +674,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                                       margin: EdgeInsets.zero,
                                       width: 80,
                                       height: 32,
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerLeft,
                                       color: Colors.transparent,
                                       child: Text('编辑', style: TextStyle(color: themeData.textTheme.bodyLarge?.color, fontSize: 17, fontWeight: FontWeight.normal)),
                                     ),
