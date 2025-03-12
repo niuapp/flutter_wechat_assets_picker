@@ -194,7 +194,7 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
 
   /// Height for bottom action bar.
   /// 底部操作栏的高度
-  double get bottomActionBarHeight => kToolbarHeight / 1.1;
+  double get bottomActionBarHeight => kToolbarHeight;
 
   /// Height for the permission limited bar.
   /// 权限受限栏的高度
