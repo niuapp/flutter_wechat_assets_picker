@@ -1,0 +1,35 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.vachel.editor.ui.PictureEditView
+        android:id="@+id/image_canvas"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ViewSwitcher
+        android:id="@+id/vs_op"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:inAnimation="@anim/anim_fade_in"
+        android:outAnimation="@anim/anim_fade_out"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <include layout="@layout/edit_opt_layout" />
+        <include layout="@layout/edit_clip_layout" />
+
+    </ViewSwitcher>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

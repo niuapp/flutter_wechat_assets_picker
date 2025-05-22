@@ -31,7 +31,9 @@ dependencies:
   video_player: 2.9.5
   visibility_detector: 0.4.0+2
   # 图片编辑器 https://pub.dev/packages/flutter_photo_editor
-  flutter_photo_editor: 0.0.5
+  #  flutter_photo_editor: 0.0.5
+  flutter_photo_editor:
+    path: others/flutter_photo_editor-0.0.5
 
 dev_dependencies:
   flutter_lints: any
