@@ -15,6 +15,7 @@ import 'package:flutter_photo_editor/flutter_photo_editor.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_picker_library/wechat_picker_library.dart';
 
 import '../constants/custom_scroll_physics.dart';
@@ -570,10 +571,10 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
       builder: (_, v, child) => AnimatedPositionedDirectional(
         duration: kThemeAnimationDuration,
         curve: Curves.easeInOut,
-        bottom: v ? 0.0 : -(context.bottomPadding + bottomDetailHeight),
+        bottom: v ? 0.0 : -(bottomPadding + bottomDetailHeight),
         start: 0.0,
         end: 0.0,
-        height: context.bottomPadding + bottomDetailHeight,
+        height: bottomPadding + bottomDetailHeight,
         child: child!,
       ),
       child: CNP<AssetPickerViewerProvider<AssetEntity>?>.value(
@@ -600,8 +601,8 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                 ),
               ),
             Container(
-              height: bottomBarHeight + context.bottomPadding,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: context.bottomPadding),
+              height: bottomBarHeight + bottomPadding,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: bottomPadding),
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: themeData.canvasColor)),
                 color: backgroundColor,
@@ -1063,6 +1064,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
 
   @override
   Widget build(BuildContext context) {
+
     return Theme(
       data: themeData,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -1076,7 +1078,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                 momentVideoBackButton(context),
                 PositionedDirectional(
                   end: 16,
-                  bottom: context.bottomPadding + 16,
+                  bottom: bottomPadding + 16,
                   child: confirmButton(context),
                 ),
               ] else ...<Widget>[

@@ -5,7 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_photo_editor/flutter_photo_editor.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: TextButton(
                 onPressed: () {
-                  test();
+                  // test();
                 },
                 child: Text("Add photo"),
               ),
@@ -78,17 +78,17 @@ class _MyAppState extends State<MyApp> {
 
   String? imagePath;
 
-  void test() async {
-    print("start");
-
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    String? path = image?.path;
-    // onImageEdit(path);
-    if(path != null) {
-      editImage(path);
-    }
-  }
+  // void test() async {
+  //   print("start");
+  //
+  //   final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //
+  //   String? path = image?.path;
+  //   // onImageEdit(path);
+  //   if(path != null) {
+  //     editImage(path);
+  //   }
+  // }
 
   void editImage(String path) async {
 

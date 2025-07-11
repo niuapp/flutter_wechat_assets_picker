@@ -5,6 +5,8 @@
 // ignore: unnecessary_library_name
 library wechat_assets_picker;
 
+import 'package:flutter/material.dart';
+
 export 'package:photo_manager/photo_manager.dart';
 export 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
@@ -29,3 +31,6 @@ export 'src/widget/asset_picker_app_bar.dart';
 export 'src/widget/asset_picker_page_route.dart';
 export 'src/widget/asset_picker_viewer.dart';
 export 'src/widget/builder/asset_entity_grid_item_builder.dart';
+
+double bottomPadding = WidgetsBinding.instance.platformDispatcher.views.first.viewPadding.bottom / WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
+// double bottomPadding = 0;
