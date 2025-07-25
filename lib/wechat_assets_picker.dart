@@ -32,5 +32,12 @@ export 'src/widget/asset_picker_page_route.dart';
 export 'src/widget/asset_picker_viewer.dart';
 export 'src/widget/builder/asset_entity_grid_item_builder.dart';
 
-double bottomPadding = WidgetsBinding.instance.platformDispatcher.views.first.viewPadding.bottom / WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
-// double bottomPadding = 0;
+double bottomPadding(BuildContext context) {
+  return WidgetsBinding.instance.platformDispatcher.views.first.viewPadding.bottom / WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
+
+  // return MediaQuery.of(context).viewPadding.bottom;
+  // // return 0;
+  // final view = View.of(context);
+  // return MediaQueryData.fromView(view).viewPadding.bottom;
+  // return view.viewPadding.bottom / view.devicePixelRatio;
+}

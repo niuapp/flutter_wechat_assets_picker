@@ -571,10 +571,10 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
       builder: (_, v, child) => AnimatedPositionedDirectional(
         duration: kThemeAnimationDuration,
         curve: Curves.easeInOut,
-        bottom: v ? 0.0 : -(bottomPadding + bottomDetailHeight),
+        bottom: v ? 0.0 : -(bottomPadding(context) + bottomDetailHeight),
         start: 0.0,
         end: 0.0,
-        height: bottomPadding + bottomDetailHeight,
+        height: bottomPadding(context) + bottomDetailHeight,
         child: child!,
       ),
       child: CNP<AssetPickerViewerProvider<AssetEntity>?>.value(
@@ -601,8 +601,8 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                 ),
               ),
             Container(
-              height: bottomBarHeight + bottomPadding,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: bottomPadding),
+              height: bottomBarHeight + bottomPadding(context),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: bottomPadding(context)),
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: themeData.canvasColor)),
                 color: backgroundColor,
@@ -1078,7 +1078,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                 momentVideoBackButton(context),
                 PositionedDirectional(
                   end: 16,
-                  bottom: bottomPadding + 16,
+                  bottom: bottomPadding(context) + 16,
                   child: confirmButton(context),
                 ),
               ] else ...<Widget>[

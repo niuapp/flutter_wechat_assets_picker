@@ -637,9 +637,9 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
     final children = <Widget>[
       if (isPermissionLimited) accessLimitedBottomTip(context),
       Container(
-        height: bottomActionBarHeight + bottomPadding,
+        height: bottomActionBarHeight + bottomPadding(context),
         padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
-          bottom: bottomPadding,
+          bottom: bottomPadding(context),
         ),
         color: theme.bottomAppBarTheme.color?.withOpacity(
           theme.bottomAppBarTheme.color!.opacity * (isAppleOS(context) ? .9 : 1),
@@ -1482,7 +1482,7 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
                   selector: (_, DefaultAssetPickerProvider p) => p.currentAssets,
                   builder: (BuildContext context, List<AssetEntity> assets, _) {
                     final SliverGap bottomGap = SliverGap.v(
-                      bottomPadding + bottomSectionHeight,
+                      bottomPadding(context) + bottomSectionHeight,
                     );
                     appBarPreferredSize ??= appBar(context).preferredSize;
 
@@ -2454,7 +2454,7 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
     if (hasBottomActions) {
       currentBottomPadding = 0;
     } else {
-      currentBottomPadding = bottomPadding;
+      currentBottomPadding = bottomPadding(context);
     }
     return GestureDetector(
       onTap: () {
@@ -2463,7 +2463,7 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10).add(EdgeInsets.only(bottom: currentBottomPadding)),
-        height: permissionLimitedBarHeight + bottomPadding,
+        height: permissionLimitedBarHeight + bottomPadding(context),
         color: theme.primaryColor.withOpacity(isAppleOS(context) ? 0.90 : 1),
         child: Row(
           children: <Widget>[
@@ -2498,9 +2498,9 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
       if (isPermissionLimited) accessLimitedBottomTip(context),
       if (hasBottomActions)
         Container(
-          height: bottomActionBarHeight + bottomPadding,
+          height: bottomActionBarHeight + bottomPadding(context),
           padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
-            bottom: bottomPadding,
+            bottom: bottomPadding(context),
           ),
           color: theme.bottomAppBarTheme.color?.withOpacity(
             theme.bottomAppBarTheme.color!.opacity * (isAppleOS(context) ? .9 : 1),
