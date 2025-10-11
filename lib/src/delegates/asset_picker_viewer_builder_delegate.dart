@@ -645,8 +645,40 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                                             file = File(editPath);
                                           }
                                         }
-                                        File copyFile = file.copySync('${targetDirPath}edit_${currentData.duration}_${fileName}');
 
+                                        // // 去编辑
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => ProImageEditor.file(file!, callbacks: ProImageEditorCallbacks(
+                                        //       onImageEditingComplete: (Uint8List bytes) async {
+                                        //         // String outPath = '${targetDirPath}edit_${currentData.duration}_${fileName}';
+                                        //
+                                        //         File('${targetDirPath}edit_${currentData.duration}_${fileName}').writeAsBytes(bytes).then((copyFile) {
+                                        //           String title = '.&simple&-EDIT-${copyFile.path}';
+                                        //
+                                        //           previewAssets[viewingIndex] = currentData.copyWith(title: title, duration: Random().nextInt(9999999));
+                                        //           assetPickerViewerKey?.currentState?.updatePage();
+                                        //
+                                        //           // 替换
+                                        //           List<AssetEntity>? currentList = provider?.currentlySelectedAssets.toList();
+                                        //           if (currentList != null) {
+                                        //             int index = currentList.indexWhere((element) => element.id == currentData.id);
+                                        //             if (index >= 0) {
+                                        //               // currentList.removeAt(index);
+                                        //               currentList[index] = currentData.copyWith(title: title);
+                                        //               provider?.currentlySelectedAssets = currentList;
+                                        //             }
+                                        //           }
+                                        //
+                                        //           Navigator.pop(context);
+                                        //         });
+                                        //       },
+                                        //     )),
+                                        //   ),
+                                        // );
+
+                                        File copyFile = file.copySync('${targetDirPath}edit_${currentData.duration}_${fileName}');
                                         // 去编辑
                                         FlutterPhotoEditor().editImage(copyFile.path).then((editFlag) {
                                           if (editFlag) {
@@ -1064,7 +1096,6 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
 
   @override
   Widget build(BuildContext context) {
-
     return Theme(
       data: themeData,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
