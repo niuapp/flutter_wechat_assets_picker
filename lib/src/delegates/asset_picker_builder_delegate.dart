@@ -2284,7 +2284,7 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
     return Consumer<DefaultAssetPickerProvider>(
       builder: (_, DefaultAssetPickerProvider p, __) {
         // 不选视频时长超过5分钟的 音频超过10分钟的
-        final bool isDisabled = (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) || (isWeChatMoment && asset.type == AssetType.video && p.selectedAssets.isNotEmpty) || (asset.type == AssetType.video && asset.videoDuration.inMilliseconds > 60000 * 5) || (asset.type == AssetType.audio && asset.duration > 60000 * 10);
+        final bool isDisabled = (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) || (isWeChatMoment && asset.type == AssetType.video && p.selectedAssets.isNotEmpty) || (asset.type == AssetType.video && asset.videoDuration.inMilliseconds > 60000 * 5) || (asset.type == AssetType.audio && asset.videoDuration.inMilliseconds > 60000 * 10);
         if (isDisabled) {
           return Container(
             color: theme.colorScheme.background.withOpacity(.85),

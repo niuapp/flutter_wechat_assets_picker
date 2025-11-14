@@ -1043,7 +1043,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
           }
           final asset = previewAssets.elementAt(assetIndex);
           // 不选视频时长超过5分钟的 音频大于10分钟的
-          if ((asset.type == AssetType.video && asset.videoDuration.inMilliseconds > 60000 * 5)||(asset.type == AssetType.audio && asset.duration > 60000 * 10)) {
+          if ((asset.type == AssetType.video && asset.videoDuration.inMilliseconds > 60000 * 5)||(asset.type == AssetType.audio && asset.videoDuration.inMilliseconds > 60000 * 10)) {
             return Container();
           }
           return Selector<AssetPickerViewerProvider<AssetEntity>, List<AssetEntity>>(
