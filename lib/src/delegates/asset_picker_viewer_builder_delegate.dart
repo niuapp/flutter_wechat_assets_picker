@@ -1042,8 +1042,8 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
             );
           }
           final asset = previewAssets.elementAt(assetIndex);
-          // 不选视频时长超过5分钟的 音频大于10分钟的
-          if ((asset.type == AssetType.video && asset.videoDuration.inMilliseconds > 60000 * 5)||(asset.type == AssetType.audio && asset.videoDuration.inMilliseconds > 60000 * 10)) {
+          // 不选视频时长超过5分钟的 音频大于60分钟的
+          if ((asset.type == AssetType.video && (asset.videoDuration.inMilliseconds > 60000 * 5 || asset.videoDuration.inMilliseconds < 1000)) || (asset.type == AssetType.audio && (asset.videoDuration.inMilliseconds > 60000 * 60 || asset.videoDuration.inMilliseconds < 1000))) {
             return Container();
           }
           return Selector<AssetPickerViewerProvider<AssetEntity>, List<AssetEntity>>(
