@@ -6,6 +6,9 @@ import 'package:photo_manager/photo_manager.dart';
 
 const String packageName = 'wechat_assets_picker';
 
+/// 编辑资源标记前缀
+const String kEditAssetPrefix = '.&simple&-EDIT-';
+
 const int defaultAssetsPerPage = 80;
 const int defaultMaxAssetsCount = 9;
 

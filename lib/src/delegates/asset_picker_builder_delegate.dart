@@ -1566,8 +1566,9 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
     }
 
     if (p.hasMoreToLoad) {
-      //预加载一页
-      if ((p.pageSize <= gridCount * 3 && index == length - 1) || index == (length - p.pageSize ~/ 2)) {
+      // 预加载一页
+      final preloadIndex = length - p.pageSize ~/ 2;
+      if ((p.pageSize <= gridCount * 3 && index == length - 1) || (preloadIndex > 0 && index == preloadIndex)) {
         p.loadMoreAssets();
       }
     }
@@ -2284,8 +2285,7 @@ class DefaultAssetPickerBuilderDelegate extends AssetPickerBuilderDelegate<Asset
     return Consumer<DefaultAssetPickerProvider>(
       builder: (_, DefaultAssetPickerProvider p, __) {
         // 不选视频时长超过5分钟的 音频超过60分钟的
-        final bool isDisabled = (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) || (isWeChatMoment && asset.type == AssetType.video && p.selectedAssets.isNotEmpty) || (asset.type ==
-            AssetType.video && (asset.videoDuration.inMilliseconds > 60000 * 5 || asset.videoDuration.inMilliseconds < 1000)) || (asset.type == AssetType.audio && (asset.videoDuration.inMilliseconds > 60000 * 60 || asset.videoDuration.inMilliseconds < 1000));
+        final bool isDisabled = (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) || (isWeChatMoment && asset.type == AssetType.video && p.selectedAssets.isNotEmpty) || (asset.type == AssetType.video && (asset.videoDuration.inMinutes >= 5 || asset.videoDuration.inMilliseconds < 1000)) || (asset.type == AssetType.audio && (asset.videoDuration.inMilliseconds > 60000 * 60 || asset.videoDuration.inMilliseconds < 1000));
         if (isDisabled) {
           return Container(
             color: theme.colorScheme.background.withOpacity(.85),

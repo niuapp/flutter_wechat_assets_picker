@@ -93,8 +93,8 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
 
   Widget _imageBuilder(BuildContext context, AssetEntity asset) {
     ImageProvider? imageProvider;
-    if (asset.title?.startsWith('.&simple&-EDIT-') ?? false) {
-      String path = asset.title?.replaceFirst('.&simple&-EDIT-', '') ?? '';
+    if (asset.title?.startsWith(kEditAssetPrefix) ?? false) {
+      String path = asset.title?.replaceFirst(kEditAssetPrefix, '') ?? '';
       if (path.isNotEmpty && File(path).existsSync()) {
         imageProvider = ExtendedFileImageProvider(File(path));
       }

@@ -12,6 +12,9 @@ export 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
 export 'src/constants/config.dart';
 export 'src/constants/constants.dart' hide packageName;
+
+/// 编辑资源标记前缀
+export 'src/constants/constants.dart' show kEditAssetPrefix;
 export 'src/constants/enums.dart';
 export 'src/constants/typedefs.dart';
 

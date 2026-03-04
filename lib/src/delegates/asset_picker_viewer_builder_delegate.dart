@@ -487,8 +487,8 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
   /// Preview item widgets for images.
   /// 图片的底部预览部件
   Widget _imagePreviewItem(AssetEntity asset) {
-    if (asset.title?.startsWith('.&simple&-EDIT-') ?? false) {
-      String path = asset.title?.replaceFirst('.&simple&-EDIT-', '') ?? '';
+    if (asset.title?.startsWith(kEditAssetPrefix) ?? false) {
+      String path = asset.title?.replaceFirst(kEditAssetPrefix, '') ?? '';
       if (path.isNotEmpty && File(path).existsSync()) {
         // 编辑状态
         return Positioned.fill(
@@ -639,8 +639,8 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                                         }
 
                                         // 有原编辑文件
-                                        if (currentData.title?.startsWith('.&simple&-EDIT-') ?? false) {
-                                          String editPath = currentData.title?.replaceFirst('.&simple&-EDIT-', '') ?? '';
+                                        if (currentData.title?.startsWith(kEditAssetPrefix) ?? false) {
+                                          String editPath = currentData.title?.replaceFirst(kEditAssetPrefix, '') ?? '';
                                           if (editPath.isNotEmpty && File(editPath).existsSync()) {
                                             file = File(editPath);
                                           }
@@ -655,7 +655,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                                         //         // String outPath = '${targetDirPath}edit_${currentData.duration}_${fileName}';
                                         //
                                         //         File('${targetDirPath}edit_${currentData.duration}_${fileName}').writeAsBytes(bytes).then((copyFile) {
-                                        //           String title = '.&simple&-EDIT-${copyFile.path}';
+                                        //           String title = kEditAssetPrefix + copyFile.path;
                                         //
                                         //           previewAssets[viewingIndex] = currentData.copyWith(title: title, duration: Random().nextInt(9999999));
                                         //           assetPickerViewerKey?.currentState?.updatePage();
@@ -678,11 +678,12 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                                         //   ),
                                         // );
 
-                                        File copyFile = file.copySync('${targetDirPath}edit_${currentData.duration}_${fileName}');
-                                        // 去编辑
-                                        FlutterPhotoEditor().editImage(copyFile.path).then((editFlag) {
+                                        try {
+                                          File copyFile = file.copySync('${targetDirPath}edit_${currentData.duration}_${fileName}');
+                                          // 去编辑
+                                          FlutterPhotoEditor().editImage(copyFile.path).then((editFlag) {
                                           if (editFlag) {
-                                            String title = '.&simple&-EDIT-${copyFile.path}';
+                                            String title = kEditAssetPrefix + copyFile.path;
 
                                             previewAssets[viewingIndex] = currentData.copyWith(title: title, duration: Random().nextInt(9999999));
                                             assetPickerViewerKey?.currentState?.updatePage();
@@ -695,12 +696,19 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
                                                 // currentList.removeAt(index);
                                                 currentList[index] = currentData.copyWith(title: title);
                                                 provider?.currentlySelectedAssets = currentList;
+                                              } else {
+                                                // 没找到，添加新的
+                                                currentList.add(currentData.copyWith(title: title));
+                                                provider?.currentlySelectedAssets = currentList;
                                               }
                                             }
                                             // currentData = currentData.copyWith(relativePath: copyFile.path);
                                             // previewAssets[viewingIndex] = currentData.copyWith(relativePath: copyFile.path);
                                           }
-                                        });
+                                          });
+                                        } catch (e) {
+                                          debugPrint('编辑图片操作失败：$e');
+                                        }
                                       }
                                     },
                                     child: Container(
@@ -1043,7 +1051,7 @@ class DefaultAssetPickerViewerBuilderDelegate extends AssetPickerViewerBuilderDe
           }
           final asset = previewAssets.elementAt(assetIndex);
           // 不选视频时长超过5分钟的 音频大于60分钟的
-          if ((asset.type == AssetType.video && (asset.videoDuration.inMilliseconds > 60000 * 5 || asset.videoDuration.inMilliseconds < 1000)) || (asset.type == AssetType.audio && (asset.videoDuration.inMilliseconds > 60000 * 60 || asset.videoDuration.inMilliseconds < 1000))) {
+          if ((asset.type == AssetType.video && (asset.videoDuration.inMinutes >= 5 || asset.videoDuration.inMilliseconds < 1000)) || (asset.type == AssetType.audio && (asset.videoDuration.inMilliseconds > 60000 * 60 || asset.videoDuration.inMilliseconds < 1000))) {
             return Container();
           }
           return Selector<AssetPickerViewerProvider<AssetEntity>, List<AssetEntity>>(

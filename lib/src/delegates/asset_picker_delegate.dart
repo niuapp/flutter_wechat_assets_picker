@@ -185,7 +185,9 @@ class AssetPickerDelegate {
     }
     try {
       PhotoManager.addChangeCallback(callback);
-      PhotoManager.startChangeNotify();
+      // 注释掉 startChangeNotify() 以避免滑动加载时触发权限请求循环
+      // 详见：https://github.com/fluttercandies/flutter_photo_manager/issues/
+      // PhotoManager.startChangeNotify();
     } catch (e, s) {
       FlutterError.presentError(
         FlutterErrorDetails(
@@ -208,7 +210,8 @@ class AssetPickerDelegate {
     }
     try {
       PhotoManager.removeChangeCallback(callback);
-      PhotoManager.stopChangeNotify();
+      // 注释掉 stopChangeNotify() 以匹配 registerObserve 的修改
+      // PhotoManager.stopChangeNotify();
     } catch (e, s) {
       FlutterError.presentError(
         FlutterErrorDetails(
